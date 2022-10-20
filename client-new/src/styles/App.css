@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Century Gothic";
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+}
+
+.App {
+    width: 100%;
+}
+
+.mainPage{
+    width: 100%;
+    display: flex;
+}
+
+.devicePage{
+    width: 100%;
+    color: #704844;
+}
+
+
+
+
+.deviceView .imageBlock{
+    width: 300px;
+    height: 300px;
+}
+
+.deviceView .imageBlock img{
+    width: 300px;
+    height: 300px;
+}
+
+.deviceView .ratingBlock{
+    width: 300px;
+    height: 300px;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+}
+
+.deviceView .usingBlock{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 300px;
+    border: 3px solid lightsalmon;
+    border-radius: 10px;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 95px;
+    padding-bottom: 20px ;
+    font-size: 30px;
+}
+.deviceView .usingBlock Button {
+    width: 200px;
+    height: 60px;
+    font-size: 17px;
+}
+
+.infoBlock {
+    margin: 15px;
+}
+
+.infoBlock h2{
+    font-size: 40px;
+}
+
+.infoBlock .infoItem{
+    margin-top: 7px;
+    font-size: 20px;
+}
+
+.content{
+    height: auto;
+    margin-bottom: 40px;
+    color: #442315;
+    min-height: 80vh;
+    min-width: 100vh;
+}
+
+.basketPage{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+.basketTitle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.basketEmpty{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    margin-top: 150px;
+    color: rgba(153, 153, 153, 0.47);
+}
+
+
+

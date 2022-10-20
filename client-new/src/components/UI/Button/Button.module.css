@@ -1,0 +1,16 @@
+.btn {
+    margin: 5px;
+    background-color: burlywood;
+    border: 1px solid burlywood;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.7rem;
+    font-size: 15px;
+    color: #704844;
+    transition: 0.3s;
+}
+.btn:hover{
+    background-color: #704844;
+    color: cornsilk;
+    border: 1px solid #704844;
+}

@@ -1,0 +1,12 @@
+.inputRadio{
+    display: none;
+}
+
+.star{
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.starRating{
+    margin-left: 20px;
+}
