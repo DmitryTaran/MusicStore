@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import classes from './NavBar.module.css'
 import Button from "../UI/Button/Button";
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import {ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE} from "../../utils/consts";
+import {Link, useNavigate} from "react-router-dom";
+import {BASKET_ROUTE, MAIN_ROUTE} from "../../utils/consts";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 import Modal from "../UI/Modal/Modal";
