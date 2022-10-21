@@ -6,7 +6,6 @@ import UserStore from "./store/UserStore";
 import BasketStore from "./store/BasketStore";
 
 export const Context = createContext(null)
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Context.Provider value={{

@@ -10,12 +10,11 @@ const DevicePage = observer(() => {
 
     const {device, basket, user} = useContext(Context)
     const {id} = useParams()
-    const chosenDevice = device.devices.find(device => device.id === id)
+    const chosenDevice = device.devices.find(device => device.id == id)
     const [comments, setComments] = useState([
         {id: 1, userName: 'Валерия Язагит', text: 'Отличная скрипка', date: '21/12/1488', rating: 5},
         {id: 2, userName: 'Яков Лава', text: 'Хуйня', date: '21/12/1337', rating: 5},
     ])
-
     const deviceInfos = [
         {id:1, name: 'Количество струн', description: '5'},
         {id:2, name: 'Материал корпуса', description: 'Дерево'},

@@ -1,4 +1,5 @@
 import {makeAutoObservable} from "mobx";
+import {login} from "../http/userAPI";
 
 export default class UserStore {
     constructor() {

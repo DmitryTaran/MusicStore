@@ -7,13 +7,27 @@ import Form from "../UI/Form/Form";
 import {useInput} from "../../hooks/useInput";
 import {validateEmail, validateEmptiness, validateMinLength} from "../../utils/validations";
 import {useForm} from "../../hooks/useForm";
+import {login, registration} from "../../http/userAPI";
+import {observer} from "mobx-react-lite";
+import {useFetching} from "../../hooks/useFetching";
 
-const AuthForm = (props) => {
+const AuthForm = observer(({setAuthActive, ...props}) => {
 
-    const onSubmitButtonClick = () => {
-        user.setIsAuth(true)
-        props.setAuthActive(false)
-    }
+    const {user} = useContext(Context)
+
+    const [signInWithRegistration,
+        isRegistrationDataLoading,
+        registrationError] = useFetching(async () => {
+        await registration(email.value, password.value).then(() => {
+            console.log('success')})
+    })
+
+    const [signInWithAuthorization,
+        isAuthorizationDataLoading,
+        authorizationError] = useFetching(async () => {
+            await login(email.value, password.value).then(() => {
+            console.log('success')})
+    })
 
     const [isLogin, setIsLogin] = useState(false)
 
@@ -29,7 +43,7 @@ const AuthForm = (props) => {
 
     const {isSubmitButtonDisabled} = useForm([email, password], [email.errFlag, password.errFlag])
 
-    const {user} = useContext(Context)
+
 
     return (
        <Form>
@@ -64,7 +78,7 @@ const AuthForm = (props) => {
                    <div className={classes.haveAccount}>
                        Нет аккаунта? <span onClick={() => setIsLogin(false)}>Зарегистрируйтесь</span>
                    </div>
-                   <Button onClick={() => onSubmitButtonClick()}
+                   <Button onClick={signInWithAuthorization}
                        disabled={isSubmitButtonDisabled}
                    >
                        Войти
@@ -75,11 +89,34 @@ const AuthForm = (props) => {
                    <div className={classes.haveAccount}>
                        Есть аккаунт? <span onClick={() => setIsLogin(true)}>Войдите</span>
                    </div>
-                   <Button >Зарегистрироваться</Button>
+                   <Button
+                       onClick={() => {
+                           if (isSubmitButtonDisabled)
+                               console.log('ad')
+                           else signInWithRegistration()
+                       }}
+                   >
+                       Зарегистрироваться
+                   </Button>
                </div>
            }
+
+           {isRegistrationDataLoading || isAuthorizationDataLoading && <div>
+               Загрузка...
+           </div>}
+           {
+               !!authorizationError && <div>
+                   {authorizationError}
+               </div>
+           }
+           {
+               !!registrationError && <div>
+                   {registrationError}
+               </div>
+           }
+
        </Form>
 );
-};
+});
 
 export default AuthForm;

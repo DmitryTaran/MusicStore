@@ -7,6 +7,8 @@ import CreateDeviceForm from "./CreateDeviceForm/CreateDeviceForm";
 import CreateManualForm from "./CreateManualForm/CreateManualForm";
 import Button from "./UI/Button/Button";
 import {useDropdown} from "../hooks/useDropdown";
+import {FiTool} from  'react-icons/fi'
+
 
 const AdminTools = () => {
 
