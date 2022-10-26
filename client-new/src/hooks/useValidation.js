@@ -14,7 +14,7 @@ export const useValidation = (value, validations = [], isChecking) => {
                     break
                 } else setErrFlag(false)
         }
-    } , [isChecking])
+    } , [isChecking, value])
 
 
 

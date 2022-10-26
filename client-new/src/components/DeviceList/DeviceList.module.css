@@ -5,3 +5,8 @@
     margin-left: 15px;
     height: 100%;
 }
+
+.deviceListWithPagination{
+    display: flex;
+    flex-direction: column;
+}

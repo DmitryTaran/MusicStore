@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-export const useForm = (values, errFlags) => {
+export const useForm = (errFlags) => {
 
     const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(true)
 

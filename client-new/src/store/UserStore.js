@@ -3,8 +3,8 @@ import {login} from "../http/userAPI";
 
 export default class UserStore {
     constructor() {
-        this._isAuth = true
-        this._user = {role: 'MODERATOR'}
+        this._isAuth = false
+        this._user = {}
         makeAutoObservable(this)
     }
 

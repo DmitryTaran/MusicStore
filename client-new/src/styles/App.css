@@ -24,7 +24,11 @@
     color: #704844;
 }
 
-
+.pagination{
+    margin: 40px;
+    display: flex;
+    justify-content: center;
+}
 
 
 .deviceView .imageBlock{
@@ -79,7 +83,6 @@
 
 .content{
     height: auto;
-    margin-bottom: 40px;
     color: #442315;
     min-height: 80vh;
     min-width: 100vh;
