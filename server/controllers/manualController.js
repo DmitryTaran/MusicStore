@@ -14,8 +14,9 @@ class ManualController {
 
     async create (req, res, next) {
 
-        const {name} = req.body
 
+
+        const {name} = req.body
         const exist = await Manual.findOne({where: {name}})
 
         if (exist){

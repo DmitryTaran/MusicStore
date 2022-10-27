@@ -7,19 +7,22 @@ import CreateDeviceForm from "./CreateDeviceForm/CreateDeviceForm";
 import CreateManualForm from "./CreateManualForm/CreateManualForm";
 import Button from "./UI/Button/Button";
 import {useDropdown} from "../hooks/useDropdown";
-import {FiTool} from  'react-icons/fi'
+import {FiTool} from 'react-icons/fi'
+import Notice from "./UI/Notice/Notice";
+import {useNotice} from "../hooks/useNotice";
 
 
 const AdminTools = () => {
 
     const [createDeviceFormActive, setCreateDeviceFormActive] = useState(false)
     const [createManualFormActive, setCreateManualFormActive] = useState(false)
-
+    const [isNoticeActive, setIsNoticeActive] = useNotice()
     const [openAdminTool, setOpenAdminTool, dropdownRef] = useDropdown()
-
+    const [noticeMessage, setNoticeMessage] = useState('')
 
     return (
         <div>
+            <Notice isActive={isNoticeActive}>{noticeMessage}</Notice>
             <div ref={dropdownRef}>
                 <Button onClick={() => setOpenAdminTool(!openAdminTool)}>Инструменты</Button>
                 <Dropdown
@@ -58,7 +61,11 @@ const AdminTools = () => {
                 active={createManualFormActive}
                 setActive={setCreateManualFormActive}
             >
-                <CreateManualForm/>
+                <CreateManualForm
+                    setCreateManualActive={setCreateManualFormActive}
+                    setIsNoticeActive={setIsNoticeActive}
+                    setNoticeMessage={setNoticeMessage}
+                />
             </Modal>
         </div>
     );

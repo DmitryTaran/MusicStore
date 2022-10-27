@@ -6,18 +6,7 @@ import Dropdown from "../Dropdown/Dropdown";
 import {useDropdown} from "../../../hooks/useDropdown";
 import {useInput} from "../../../hooks/useInput";
 
-const Search = () => {
-
-
-    const manuals = [
-        {id: 1, name: 'Категория'},
-        {id: 2, name: 'Бренд'},
-        {id: 3, name: 'Количество струн'},
-        {id: 4, name: 'Материал корпуса'},
-        {id: 5, name: 'Материал грифа'},
-        {id: 6, name: 'Тип звукоснимателей'},
-        {id: 7, name: 'Ориентация'},
-    ]
+const Search = ({manuals}) => {
 
     const [selectedManual, setSelectedManual] = useState({})
 

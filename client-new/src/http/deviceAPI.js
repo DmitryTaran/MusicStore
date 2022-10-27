@@ -1,4 +1,4 @@
-import {$host} from "./index";
+import {$authHost, $host} from "./index";
 
 
 export const getAllTypes = async () => {
@@ -10,8 +10,9 @@ export const getAllManuals = async () => {
 
 }
 
-export const createManual = async () => {
-
+export const createManual = async (manualName) => {
+    const {data} = await $authHost.post('api/manual',{name: manualName})
+    return data
 }
 
 export const getAllDevices = async (typeName, limit, page) => {

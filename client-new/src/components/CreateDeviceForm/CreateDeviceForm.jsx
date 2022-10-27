@@ -7,6 +7,8 @@ import {useInput} from "../../hooks/useInput";
 import {validateEmptiness, validateIntegrity, validatePositiveness} from "../../utils/validations";
 import Search from "../UI/Search/Search";
 import Button from "../UI/Button/Button";
+import SubmitButton from "../UI/SubmitButton/SubmitButton";
+import {useForm} from "../../hooks/useForm";
 
 
 const CreateDeviceForm = () => {
@@ -30,6 +32,8 @@ const CreateDeviceForm = () => {
         {condition: validatePositiveness, message: "Стоимость не может быть отрицательной"},
         {condition: validateIntegrity, message: "Стоимость является целым числом"},
     ])
+
+    const {isSubmitButtonDisabled} = useForm([deviceName.errFlag, price.errFlag])
 
     return (
         <Form>
@@ -77,6 +81,10 @@ const CreateDeviceForm = () => {
                         </div>
                     )
                 }
+
+                <SubmitButton isDisabled={isSubmitButtonDisabled}>
+                    Добавить товар
+                </SubmitButton>
             </div>
 
         </Form>
