@@ -22,10 +22,27 @@ export const getAllDevices = async (typeName, limit, page) => {
     return data
 }
 
-export const getOneDevice = async () => {
+export const getOneDevice = async (id) => {
+    const {data} = await $host.get('api/device/' + id)
+    return data
+}
 
+export const getAllDeviceInfos = async (deviceId) => {
+    const {data} = await $host.get('api/deviceInfo/' + deviceId)
+    return data
 }
 
 export const createDevice = async () => {
 
+}
+
+
+export const getAllComments = async (deviceId) => {
+    const {data} = await $host.get('api/feedback/' + deviceId)
+    return data
+}
+
+export const leaveComment = async (deviceId, title, description, rate, userId) => {
+    const {data} = await $authHost.post('api/feedback', {deviceId, title, description, rate, userId})
+    return data
 }

@@ -1,15 +1,15 @@
 .notice{
-    right: 10px;
-    bottom: 10px;
-    position: fixed;
     padding: 20px;
+    margin-top: 10px;
     border-radius: 10px;
-    border: 1px solid rgba(0, 128, 0, 0.68);
-    background-color: rgba(144, 238, 144, 0.58);
-    opacity: 0;
-    transition: 0.3s;
 }
 
-.active{
-    opacity: 1;
+.success{
+    border: 1px solid rgba(0, 128, 0, 0.68);
+    background-color: rgba(144, 238, 144, 0.58);
+}
+
+.danger{
+    border: 1px solid rgba(128, 0, 0, 0.68);
+    background-color: rgba(238, 144, 144, 0.58);
 }

@@ -18,7 +18,7 @@ const AuthForm = observer(({setAuthActive, ...props}) => {
 
     const [signInWithRegistration,
         isRegistrationDataLoading,
-        registrationError] = useFetching(async () => {
+        registrationMessage] = useFetching(async () => {
         await registration(email.value, password.value).then((data) => {
             user.setUser(data)
             user.setIsAuth(true)
@@ -28,7 +28,7 @@ const AuthForm = observer(({setAuthActive, ...props}) => {
 
     const [signInWithAuthorization,
         isAuthorizationDataLoading,
-        authorizationError] = useFetching(async () => {
+        authorizationMessage] = useFetching(async () => {
         const data = await login(email.value, password.value)
         user.setUser(data)
         user.setIsAuth(true)
@@ -95,17 +95,6 @@ const AuthForm = observer(({setAuthActive, ...props}) => {
                     <SubmitButton submit={signInWithRegistration} isDisabled={isSubmitButtonDisabled}>
                         Зарегистрироваться
                     </SubmitButton>
-                </div>
-            }
-
-            {
-                !!authorizationError && <div>
-                    {authorizationError}
-                </div>
-            }
-            {
-                !!registrationError && <div>
-                    {registrationError}
                 </div>
             }
 

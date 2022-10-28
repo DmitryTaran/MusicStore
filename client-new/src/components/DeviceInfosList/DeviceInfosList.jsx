@@ -7,9 +7,8 @@ const DeviceInfosList = ({deviceInfos}) => {
             <div>
                 {deviceInfos.map(info =>
                     <div key={info.id} className={classes.deviceInfoItem}>
-                        <div>{info.name}:</div>
+                        <div>{info?.manual?.name}:</div>
                         <div>{info.description}</div>
-
                     </div>
                 )}
             </div>

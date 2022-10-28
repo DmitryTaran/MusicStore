@@ -8,7 +8,7 @@ import {useFetching} from "./hooks/useFetching";
 import {check} from "./http/userAPI";
 import {Context} from "./index";
 import Loading from "./components/UI/Loading/Loading";
-import Notice from "./components/UI/Notice/Notice";
+import NoticeList from "./components/NoticeList/NoticeList";
 
 function App() {
 
@@ -39,6 +39,7 @@ function App() {
               <NavBar/>
               <AppRouter/>
               <Footer/>
+              <NoticeList/>
           </div>
       </BrowserRouter>
   );

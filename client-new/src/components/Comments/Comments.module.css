@@ -23,6 +23,12 @@
     margin-top: 10px;
 }
 
+.commentTitle{
+    margin-top: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
 .commentItemRating{
     display: flex;
     align-items: center;

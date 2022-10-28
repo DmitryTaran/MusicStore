@@ -1,35 +1,34 @@
-import React, {useContext, useState} from 'react';
-import {Context} from "../index";
+import React, {useContext, useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 import DeviceView from "../components/DeviceView/DeviceView";
 import DeviceInfosList from "../components/DeviceInfosList/DeviceInfosList";
 import Comments from "../components/Comments/Comments";
+import {useFetching} from "../hooks/useFetching";
+import {getAllComments, getAllDeviceInfos, getOneDevice} from "../http/deviceAPI";
+import Loading from "../components/UI/Loading/Loading";
+import {Context} from "../index";
 
 const DevicePage = observer(() => {
 
-    const {device, basket, user} = useContext(Context)
+    const {oneDevice} = useContext(Context)
+
     const {id} = useParams()
-    const chosenDevice = device.devices.find(device => device.id == id)
-    const [comments, setComments] = useState([
-        {id: 1, userName: 'Валерия Язагит', text: 'Отличная скрипка', date: '21/12/1488', rating: 5},
-        {id: 2, userName: 'Яков Лава', text: 'Хуйня', date: '21/12/1337', rating: 5},
-    ])
-    const deviceInfos = [
-        {id:1, name: 'Количество струн', description: '5'},
-        {id:2, name: 'Материал корпуса', description: 'Дерево'},
-        {id:3, name: 'Материал грифа', description: 'Береза'},
-        {id:4, name: 'Тремоло', description: 'Да'},
-    ]
 
-
-
+    const [fetchOneDevice, isFetchOneDeviceLoading, fetchOneDeviceError] = useFetching(async () => {
+        await getOneDevice(id).then((device) => oneDevice.setDevice(device))
+        await getAllDeviceInfos(id).then((infos) => oneDevice.setDeviceInfos(infos))
+        await getAllComments(id).then((comments) => oneDevice.setComments(comments))
+    })
+    useEffect(() => {
+        fetchOneDevice()
+    }, [])
     return (
         <div className="devicePage">
-
-            <DeviceView device={chosenDevice}/>
-            <DeviceInfosList deviceInfos={deviceInfos}/>
-            <Comments comments={comments} setComments={setComments}></Comments>
+            <Loading isLoading={isFetchOneDeviceLoading}/>
+            <DeviceView device={oneDevice.device}/>
+            <DeviceInfosList deviceInfos={oneDevice.deviceInfos}/>
+            <Comments comments={oneDevice.comments} />
         </div>
     );
 });

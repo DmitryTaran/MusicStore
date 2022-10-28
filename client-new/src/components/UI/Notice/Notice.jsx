@@ -1,9 +1,15 @@
 import React from 'react';
 import classes from './Notice.module.css'
 
-const Notice = ({children, isActive}) => {
+const Notice = ({children, isSuccess, ...props}) => {
     return (
-            <div className={isActive ? `${classes.notice} ${classes.active}` : classes.notice}>
+            <div
+                className={isSuccess
+                    ? `${classes.notice} ${classes.success}`
+                    : `${classes.notice} ${classes.danger}`
+            }
+                {...props}
+            >
                 {children}
             </div>
     );

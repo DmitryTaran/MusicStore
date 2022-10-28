@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Button from "../Button/Button";
+import {Context} from "../../../index";
 
 const SubmitButton = ({submit, isDisabled, children}) => {
 
+    const {notice} = useContext(Context)
+
     const onSubmitButtonClick = () => {
         if (isDisabled)
-            alert('Проверьте корректность введенных данных')
+            notice.addNotice({message: 'Проверьте корректность введенных данных', isSuccess: false})
         else submit()
     }
 

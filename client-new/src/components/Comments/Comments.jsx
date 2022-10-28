@@ -5,6 +5,7 @@ import Modal from "../UI/Modal/Modal";
 import CommentForm from "../CommentForm/CommentForm";
 import {Context} from "../../index";
 import {AiFillStar} from "react-icons/ai";
+import {formatDate} from "../../utils/formatDate";
 
 const Comments = ({comments, setComments}) => {
 
@@ -21,19 +22,19 @@ const Comments = ({comments, setComments}) => {
     return (
         <div className={classes.commentsList}>
             <h2>Комментарии</h2>
-
             {comments.map((comment) =>
                     <div key={comment.id} className={classes.commentItem}>
                         <div >
-                            <div className={classes.commentItemTitle}>{comment.userName}
+                            <div className={classes.commentItemTitle}>{comment.user.email}
                                 <span className={classes.commentItemDate}>
-                                     Дата: {comment.date}
+                                     Дата: {formatDate(comment?.createdAt)}
                                 </span>
                             </div>
-                            <div className={classes.commentItemText}>{comment.text}</div>
+                            <div className={classes.commentTitle}>{comment.title}</div>
+                            <div className={classes.commentItemText}>{comment.description}</div>
                         </div>
                         <div className={classes.commentItemRating}>
-                            {comment.rating}
+                            {comment.rate}
                             <AiFillStar size={30} color={'#f1ba30'}/>
                         </div>
                     </div>
@@ -46,7 +47,11 @@ const Comments = ({comments, setComments}) => {
             <div className={classes.commentsBtn}>
                 <Button onClick={() => onCommentButtonClick()}>Комментировать</Button>
             </div>
-            <Modal active={commentFormActive} setActive={setCommentFormActive}><CommentForm/></Modal>
+            <Modal active={commentFormActive} setActive={setCommentFormActive}>
+                <CommentForm
+                    setCommentFormActive={setCommentFormActive}
+                />
+            </Modal>
         </div>
     );
 };

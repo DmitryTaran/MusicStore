@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Form from "../UI/Form/Form";
 import {useInput} from "../../hooks/useInput";
 import {validateEmptiness} from "../../utils/validations";
@@ -9,7 +9,10 @@ import SubmitButton from "../UI/SubmitButton/SubmitButton";
 import {useFetching} from "../../hooks/useFetching";
 import {createManual} from "../../http/deviceAPI";
 import Loading from "../UI/Loading/Loading";
-const CreateManualForm = ({setCreateManualActive, setNoticeMessage, setIsNoticeActive}) => {
+import {Context} from "../../index";
+const CreateManualForm = ({setCreateManualActive}) => {
+
+    const {notice} = useContext(Context)
 
     const manualName = useInput('',[
         {condition: validateEmptiness, message: "Имя характеристики не может быть пустым"}
@@ -17,13 +20,15 @@ const CreateManualForm = ({setCreateManualActive, setNoticeMessage, setIsNoticeA
 
     const {isSubmitButtonDisabled} = useForm([manualName.errFlag])
 
-    const [createManuals, isCreateManualsLoading, createManualError] = useFetching(async () => {
-        await createManual(manualName.value).then(() => {
-            setNoticeMessage('Характеристика успешно добавлена')
-            setIsNoticeActive(true)
-        })
+    const [createManuals, isCreateManualsLoading, createManualMessage] = useFetching(async () => {
+        await createManual(manualName.value)
         setCreateManualActive(false)
-    })
+    }, 'Характеристика успешно добавлена')
+
+    useEffect(() => {
+        if (createManualMessage.message)
+            notice.addNotice(createManualMessage)
+    }, [createManualMessage])
 
     return (
         <Form>
@@ -46,6 +51,7 @@ const CreateManualForm = ({setCreateManualActive, setNoticeMessage, setIsNoticeA
                     <SubmitButton isDisabled={isSubmitButtonDisabled} submit={createManuals}>
                         Создать
                     </SubmitButton>
+
                 </div>
             </div>
 
