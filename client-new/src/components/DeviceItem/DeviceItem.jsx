@@ -24,7 +24,7 @@ const DeviceItem = ({device}) => {
                     {device.name}
                 </p>
                 <div className={classes.rating}>
-                    {device.rating} <AiFillStar color={'#f1ba30'} size={25}/>
+                    {device.rating?.substring(0, 3)} <AiFillStar color={'#f1ba30'} size={25}/>
                 </div>
 
             </div>

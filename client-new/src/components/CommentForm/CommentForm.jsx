@@ -13,10 +13,11 @@ import {Context} from "../../index";
 import {leaveComment} from "../../http/deviceAPI";
 import {useParams} from "react-router-dom";
 import Loading from "../UI/Loading/Loading";
+import {useEffect} from "react";
 
 const CommentForm = ({setCommentFormActive}) => {
 
-    const {user} = useContext(Context)
+    const {user, notice, oneDevice} = useContext(Context)
 
     const {id} = useParams()
 
@@ -30,10 +31,17 @@ const CommentForm = ({setCommentFormActive}) => {
 
     const {isSubmitButtonDisabled} = useForm([commentTitle.errFlag])
 
-    const [fetchComment, isFetchCommentLoading, fetchCommentError] = useFetching(async () => {
-        await leaveComment(id, commentTitle.value, commentText, rating, user.user.id)
+    const [fetchComment, isFetchCommentLoading, fetchCommentMessage] = useFetching(async () => {
+        const comment = await leaveComment(id, commentTitle.value, commentText, rating, user.user.id)
+        oneDevice.setComments([{...comment, user: {email: user.user.email, id: user.user.id}},...oneDevice.comments])
         setCommentFormActive(false)
-    })
+    }, 'Комментарий успешно добавлен')
+
+    useEffect(() => {
+        if (fetchCommentMessage.message)
+            notice.addNotice(fetchCommentMessage)
+    }, [fetchCommentMessage])
+
 
     return (
         <Form>

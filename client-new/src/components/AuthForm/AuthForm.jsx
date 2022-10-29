@@ -11,10 +11,11 @@ import {observer} from "mobx-react-lite";
 import {useFetching} from "../../hooks/useFetching";
 import Loading from "../UI/Loading/Loading";
 import SubmitButton from "../UI/SubmitButton/SubmitButton";
+import {useEffect} from "react";
 
 const AuthForm = observer(({setAuthActive, ...props}) => {
 
-    const {user} = useContext(Context)
+    const {user, notice} = useContext(Context)
 
     const [signInWithRegistration,
         isRegistrationDataLoading,
@@ -24,7 +25,7 @@ const AuthForm = observer(({setAuthActive, ...props}) => {
             user.setIsAuth(true)
             setAuthActive(false)
         })
-    })
+    }, "Регистрация прошла успешно")
 
     const [signInWithAuthorization,
         isAuthorizationDataLoading,
@@ -33,7 +34,14 @@ const AuthForm = observer(({setAuthActive, ...props}) => {
         user.setUser(data)
         user.setIsAuth(true)
         setAuthActive(false)
-    })
+    }, "Вы успешно авторизовались")
+
+    useEffect(() => {
+        if (registrationMessage.message)
+            notice.addNotice(registrationMessage)
+        if (authorizationMessage.message)
+            notice.addNotice(authorizationMessage)
+    }, [registrationMessage, authorizationMessage])
 
     const [isLogin, setIsLogin] = useState(true)
 

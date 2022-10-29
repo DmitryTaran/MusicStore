@@ -23,6 +23,7 @@ const DevicePage = observer(() => {
     useEffect(() => {
         fetchOneDevice()
     }, [])
+    
     return (
         <div className="devicePage">
             <Loading isLoading={isFetchOneDeviceLoading}/>

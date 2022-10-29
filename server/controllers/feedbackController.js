@@ -9,8 +9,17 @@ class FeedbackController {
 
             const {deviceId} = req.params
 
-            const feedback = await Feedback.findAll({include: User, where: {deviceId}})
+            const feedback = await Feedback.findAll({
+                order: [
+                    ['createdAt', 'DESC']
+                ],
+                include: {
+                    model: User,
+                    attributes: ['email', 'id']
+                },
+                where: {deviceId},
 
+            })
             return res.json(feedback)
 
         } catch (e) {

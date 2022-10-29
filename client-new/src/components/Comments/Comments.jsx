@@ -6,17 +6,21 @@ import CommentForm from "../CommentForm/CommentForm";
 import {Context} from "../../index";
 import {AiFillStar} from "react-icons/ai";
 import {formatDate} from "../../utils/formatDate";
+import {observer} from "mobx-react-lite";
 
-const Comments = ({comments, setComments}) => {
+const Comments = observer (({comments, setComments}) => {
 
     const [commentFormActive, setCommentFormActive] = useState(false)
 
-    const {user} = useContext(Context)
+    const {user, notice} = useContext(Context)
 
     const onCommentButtonClick = () => {
         if (user.isAuth)
         setCommentFormActive(true)
-        else alert('Чтобы оставить комментарий необходимо авторизоваться')
+        else notice.addNotice({
+            message: 'Чтобы оставить комментарий необходимо авторизоваться',
+            isSuccess: false
+        })
     }
 
     return (
@@ -34,6 +38,9 @@ const Comments = ({comments, setComments}) => {
                             <div className={classes.commentItemText}>{comment.description}</div>
                         </div>
                         <div className={classes.commentItemRating}>
+                            {user.user.id === comment.user.id &&
+                            <Button>Редактировать</Button>
+                            }
                             {comment.rate}
                             <AiFillStar size={30} color={'#f1ba30'}/>
                         </div>
@@ -54,6 +61,6 @@ const Comments = ({comments, setComments}) => {
             </Modal>
         </div>
     );
-};
+});
 
 export default Comments;

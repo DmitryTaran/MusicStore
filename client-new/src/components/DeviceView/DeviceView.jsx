@@ -11,7 +11,6 @@ const DeviceView = observer (({device}) => {
     const {basket, user} = useContext(Context)
 
 
-
     return (
         <div className={classes.deviceView}>
 
@@ -23,7 +22,7 @@ const DeviceView = observer (({device}) => {
                 <div className={classes.deviceName}>
                     <p>{device.name}</p>
                     <div className={classes.deviceViewRating}>
-                        Рейтинг: {device.rating}
+                        Рейтинг: {device.rating?.substring(0, 3)}
                         <AiFillStar size={30} color={'#f1ba30'}/>
                     </div>
 
