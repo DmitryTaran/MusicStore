@@ -10,12 +10,15 @@ import SubmitButton from "../UI/SubmitButton/SubmitButton";
 import {useForm} from "../../hooks/useForm";
 import {useFetching} from "../../hooks/useFetching";
 import {Context} from "../../index";
-import {leaveComment} from "../../http/deviceAPI";
+import {editComment, leaveComment} from "../../http/deviceAPI";
 import {useParams} from "react-router-dom";
 import Loading from "../UI/Loading/Loading";
 import {useEffect} from "react";
 
-const CommentForm = ({setCommentFormActive}) => {
+const CommentForm = ({setCommentFormActive, commId}) => {
+
+    const isEditing = !!commId
+
 
     const {user, notice, oneDevice} = useContext(Context)
 
@@ -37,16 +40,33 @@ const CommentForm = ({setCommentFormActive}) => {
         setCommentFormActive(false)
     }, 'Комментарий успешно добавлен')
 
+    const [fetchCommentEdit, isFetchCommentEditLoading, fetchCommentEditMessage] = useFetching(async () => {
+        const comment = await editComment(id, commentTitle.value, commentText, rating, user.user.id)
+
+        const comments = oneDevice.comments.filter((comm) => commId !== comm.id)
+
+        oneDevice.setComments([{...comment, user: {email: user.user.email, id: user.user.id}},...comments])
+
+        setCommentFormActive(false)
+    }, 'Комментарий успешно изменен')
+
     useEffect(() => {
         if (fetchCommentMessage.message)
             notice.addNotice(fetchCommentMessage)
-    }, [fetchCommentMessage])
+        if (fetchCommentEditMessage.message)
+            notice.addNotice(fetchCommentEditMessage)
+    }, [fetchCommentMessage, fetchCommentEditMessage])
 
 
     return (
         <Form>
-            <Loading isLoading={isFetchCommentLoading}/>
-            <h2>Оставить комментарий</h2>
+            <Loading isLoading={isFetchCommentLoading || isFetchCommentEditLoading}/>
+            {
+                isEditing
+                    ? <h2>Редактировать комментарий</h2>
+                    : <h2>Оставить комментарий</h2>
+            }
+
             <Input
                 type='text'
                 title={'Заголовок'}
@@ -62,9 +82,16 @@ const CommentForm = ({setCommentFormActive}) => {
                 Поставьте оценку
                 <StarRating rating={rating} setRating={setRating}/>
             </div>
-            <SubmitButton isDisabled={isSubmitButtonDisabled} submit={fetchComment}>
+            { isEditing ?
+                <SubmitButton isDisabled={isSubmitButtonDisabled} submit={fetchCommentEdit}>
+                    Редактировать
+                </SubmitButton>
+                :
+                <SubmitButton isDisabled={isSubmitButtonDisabled} submit={fetchComment}>
                 Добавить
-            </SubmitButton>
+                </SubmitButton>
+            }
+
         </Form>
     );
 };

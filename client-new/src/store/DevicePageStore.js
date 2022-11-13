@@ -33,4 +33,10 @@ export default class DevicePageStore {
     get comments(){
         return this._comments
     }
+
+    get rating(){
+        if (this._comments.length !== 0)
+        return this._comments.reduce((accum, comment) => accum + comment.rate, 0) / this._comments.length
+        else return 0
+    }
 }

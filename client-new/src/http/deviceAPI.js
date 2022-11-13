@@ -7,7 +7,8 @@ export const getAllTypes = async () => {
 }
 
 export const getAllManuals = async () => {
-
+    const {data} = await $authHost('api/manual')
+    return data
 }
 
 export const createManual = async (manualName) => {
@@ -32,8 +33,9 @@ export const getAllDeviceInfos = async (deviceId) => {
     return data
 }
 
-export const createDevice = async () => {
-
+export const createDevice = async (device) => {
+    const {data} = await $authHost.post('api/device', device)
+    return data
 }
 
 
@@ -44,5 +46,10 @@ export const getAllComments = async (deviceId) => {
 
 export const leaveComment = async (deviceId, title, description, rate, userId) => {
     const {data} = await $authHost.post('api/feedback', {deviceId, title, description, rate, userId})
+    return data
+}
+
+export const editComment = async (deviceId, title, description, rate , userId) => {
+    const {data} = await $authHost.put('api/feedback', {deviceId, title, description, rate, userId})
     return data
 }

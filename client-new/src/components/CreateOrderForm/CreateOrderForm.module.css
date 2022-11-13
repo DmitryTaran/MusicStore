@@ -1,0 +1,23 @@
+.formInputs{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.btnBlock{
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.orderTable{
+    margin-top: 10px;
+
+}
+
+.tableData{
+    padding: 5px;
+}
+

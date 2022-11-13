@@ -12,6 +12,8 @@ const Comments = observer (({comments, setComments}) => {
 
     const [commentFormActive, setCommentFormActive] = useState(false)
 
+    const [commentEditFormActive, setCommentEditFormActive] = useState(false)
+
     const {user, notice} = useContext(Context)
 
     const onCommentButtonClick = () => {
@@ -28,18 +30,26 @@ const Comments = observer (({comments, setComments}) => {
             <h2>Комментарии</h2>
             {comments.map((comment) =>
                     <div key={comment.id} className={classes.commentItem}>
+
                         <div >
                             <div className={classes.commentItemTitle}>{comment.user.email}
                                 <span className={classes.commentItemDate}>
-                                     Дата: {formatDate(comment?.createdAt)}
+                                     Дата: {formatDate(comment?.updatedAt)}
                                 </span>
                             </div>
                             <div className={classes.commentTitle}>{comment.title}</div>
                             <div className={classes.commentItemText}>{comment.description}</div>
                         </div>
+                        {user.user.id === comment.user.id &&
+                                <Modal active={commentEditFormActive} setActive={setCommentEditFormActive}>
+                                    <CommentForm setCommentFormActive={setCommentEditFormActive} commId={comment.id}/>
+                                </Modal>
+                        }
                         <div className={classes.commentItemRating}>
                             {user.user.id === comment.user.id &&
-                            <Button>Редактировать</Button>
+                                <Button onClick={() => setCommentEditFormActive(true)}>
+                                    Редактировать
+                                </Button>
                             }
                             {comment.rate}
                             <AiFillStar size={30} color={'#f1ba30'}/>
@@ -59,6 +69,7 @@ const Comments = observer (({comments, setComments}) => {
                     setCommentFormActive={setCommentFormActive}
                 />
             </Modal>
+
         </div>
     );
 });

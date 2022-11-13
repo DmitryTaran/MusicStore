@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import Input from "../UI/Input/TextInput/Input";
 import FileInput from "../UI/Input/FileInput/FileInput";
 import classes from './CreateDeviceForm.module.css'
@@ -9,21 +9,30 @@ import Search from "../UI/Search/Search";
 import Button from "../UI/Button/Button";
 import SubmitButton from "../UI/SubmitButton/SubmitButton";
 import {useForm} from "../../hooks/useForm";
+import {useFetching} from "../../hooks/useFetching";
+import {useEffect} from "react";
+import {Context} from "../../index";
+import {createDevice} from "../../http/deviceAPI";
+import Loading from "../UI/Loading/Loading";
 
 
-const CreateDeviceForm = () => {
 
+const CreateDeviceForm = ({setCreateDeviceActive}) => {
+
+    const {notice, device} = useContext(Context)
+
+    const [changingArrayFlag, setChangingArrayFlag] = useState(false)
 
     const addNewInfo = () => {
-        setDeviceInfos([...deviceInfos, {manualId: 0, description: '', id: Date.now()}])
+        setDeviceInfos([...deviceInfos, {manualId: 0, description: '', id: Date.now(), errFlag: true}])
     }
     const removeInfo = (info) => {
         setDeviceInfos(deviceInfos.filter(i => i.id !== info.id))
     }
 
     const [deviceInfos, setDeviceInfos] = useState([])
+    const [deviceInfosErrFlags, setDeviceInfosErrFlags] = useState([])
     const [img, setImg] = useState({})
-
     const deviceName = useInput('', [
         {condition: validateEmptiness, message: "Поле не может быть пустым"},
     ])
@@ -33,10 +42,45 @@ const CreateDeviceForm = () => {
         {condition: validateIntegrity, message: "Стоимость является целым числом"},
     ])
 
-    const {isSubmitButtonDisabled} = useForm([deviceName.errFlag, price.errFlag])
+
+    useEffect(() => {
+        setDeviceInfosErrFlags(deviceInfos.map((info) => info.errFlag))
+    }, [changingArrayFlag, deviceInfos])
+
+
+    const {isSubmitButtonDisabled} = useForm(
+        [
+            deviceName.errFlag,
+            price.errFlag,
+            ...deviceInfosErrFlags
+        ]
+    )
+
+    const [createDevices, isCreateDeviceLoading, createDeviceMessage] = useFetching(async () => {
+        const formData = new FormData()
+        formData.append('name', deviceName.value)
+        formData.append('price', `${price.value}`)
+        formData.append('img', img)
+        formData.append('info', JSON.stringify(deviceInfos))
+
+        await createDevice(formData).then((data) => {
+            device.setDevices([...device.devices, data])
+            device.setTotalCount(device.totalCount + 1)
+        })
+
+        setCreateDeviceActive(false)
+
+    }, 'Товар успешно создан')
+
+    useEffect(() => {
+        if (createDeviceMessage.message)
+            notice.addNotice(createDeviceMessage)
+    }, [createDeviceMessage])
 
     return (
         <Form>
+            <Loading isLoading={isCreateDeviceLoading}/>
+
             <h2>Добавить товар</h2>
 
             <div className={classes.formInputs}>
@@ -72,8 +116,11 @@ const CreateDeviceForm = () => {
                 {
                     deviceInfos.map(info =>
                         <div key={info.id} className={classes.deviceInfoItem}>
-                            <Search/>
-                            <Input/>
+                            <Search
+                                info={info}
+                                changingFlag={changingArrayFlag}
+                                setChangingFlag={setChangingArrayFlag}
+                            />
                             <Button onClick={() => removeInfo(info)}
                             >
                                 Удалить
@@ -82,7 +129,7 @@ const CreateDeviceForm = () => {
                     )
                 }
 
-                <SubmitButton isDisabled={isSubmitButtonDisabled}>
+                <SubmitButton isDisabled={isSubmitButtonDisabled} submit={createDevices}>
                     Добавить товар
                 </SubmitButton>
             </div>

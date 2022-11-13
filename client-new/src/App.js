@@ -9,10 +9,11 @@ import {check} from "./http/userAPI";
 import {Context} from "./index";
 import Loading from "./components/UI/Loading/Loading";
 import NoticeList from "./components/NoticeList/NoticeList";
+import {getAllDevicesInOrder, getCurrentOrder} from "./http/orderAPI";
 
 function App() {
 
-    const {user} = useContext(Context)
+    const {user, basket} = useContext(Context)
 
     const [
         authorizationCheck,
@@ -25,6 +26,9 @@ function App() {
                 user.setIsAuth(true)
             }
         })
+
+        await getCurrentOrder(user.user.id).then(data => basket.setBasket(data))
+        await getAllDevicesInOrder(basket.basket.id).then(data => basket.setDevices(data))
     })
 
     useEffect(() => {

@@ -11,7 +11,7 @@ class FeedbackController {
 
             const feedback = await Feedback.findAll({
                 order: [
-                    ['createdAt', 'DESC']
+                    ['updatedAt', 'DESC']
                 ],
                 include: {
                     model: User,
@@ -59,9 +59,11 @@ class FeedbackController {
 
         try {
 
-            const {feedbackId, ...updated} = req.body
+            const {deviceId, userId, ...updated} = req.body
 
-            const feedback = await Feedback.update({...updated}, {where: {id: feedbackId}})
+            await Feedback.update({...updated}, {where: {deviceId, userId}})
+
+            const feedback = await Feedback.findOne({where: {deviceId, userId}})
 
             return res.json(feedback)
 

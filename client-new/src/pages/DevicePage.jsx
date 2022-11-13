@@ -17,7 +17,8 @@ const DevicePage = observer(() => {
 
     const [fetchOneDevice, isFetchOneDeviceLoading, fetchOneDeviceError] = useFetching(async () => {
         await getOneDevice(id).then((device) => oneDevice.setDevice(device))
-        await getAllDeviceInfos(id).then((infos) => oneDevice.setDeviceInfos(infos))
+        await getAllDeviceInfos(id).then((infos) => {
+            oneDevice.setDeviceInfos(infos)})
         await getAllComments(id).then((comments) => oneDevice.setComments(comments))
     })
     useEffect(() => {

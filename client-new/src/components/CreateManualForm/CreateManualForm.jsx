@@ -12,7 +12,7 @@ import Loading from "../UI/Loading/Loading";
 import {Context} from "../../index";
 const CreateManualForm = ({setCreateManualActive}) => {
 
-    const {notice} = useContext(Context)
+    const {notice, device} = useContext(Context)
 
     const manualName = useInput('',[
         {condition: validateEmptiness, message: "Имя характеристики не может быть пустым"}
@@ -21,7 +21,7 @@ const CreateManualForm = ({setCreateManualActive}) => {
     const {isSubmitButtonDisabled} = useForm([manualName.errFlag])
 
     const [createManuals, isCreateManualsLoading, createManualMessage] = useFetching(async () => {
-        await createManual(manualName.value)
+        await createManual(manualName.value).then((data) => device.setManuals([...device.manuals, data]))
         setCreateManualActive(false)
     }, 'Характеристика успешно добавлена')
 

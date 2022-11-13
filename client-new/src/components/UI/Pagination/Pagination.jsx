@@ -10,7 +10,6 @@ const Pagination = observer (() => {
 
 
     const pages = useMemo(() => {
-            console.log('render')
         return Array(getPageCount(device.totalCount, device.limit))
             .fill(0)
             .map((elem, index) => index + 1)},

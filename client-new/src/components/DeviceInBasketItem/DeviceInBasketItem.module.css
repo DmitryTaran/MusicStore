@@ -18,6 +18,11 @@
     display: flex;
 }
 
+.leftSide img{
+    height: 200px;
+    max-width: 400px;
+}
+
 .deviceName{
     margin-left: 20px;
     font-size: 1.2rem;

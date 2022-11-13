@@ -7,9 +7,10 @@
 }
 
 .imageBlock img{
-    width: 350px;
     height: 350px;
-    padding: 20px;
+    max-width: 400px;
+    padding: 20px 70px;
+
 }
 
 .deviceName{

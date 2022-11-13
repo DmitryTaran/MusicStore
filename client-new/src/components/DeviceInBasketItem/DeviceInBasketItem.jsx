@@ -1,40 +1,56 @@
 import React, {useContext, useEffect, useState} from 'react';
 import classes from './DeviceInBasketItem.module.css'
-import MyImage from '../../assets/guitar.jpg'
 import Button from "../UI/Button/Button";
 import Counter from "../Counter/Counter";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
+import {useFetching} from "../../hooks/useFetching";
+import {deleteDeviceFromOrder, updateCount} from "../../http/orderAPI";
+import Loading from "../UI/Loading/Loading";
 const DeviceInBasketItem = observer (({device}) => {
 
-    const [count, setCount] = useState(1)
-    const {basket} = useContext(Context)
+    const {notice, basket} = useContext(Context)
 
+    const [count, setCount] = useState(parseInt(device?.deviceInOrders[0]?.count))
 
     useEffect(() => {
-        const newDevice ={...basket.devices.find((d) => d.id === device.id)}
-        newDevice.count = count
-        basket.setDevices(basket.devices.filter(deviceInBasket => deviceInBasket.id !== device.id))
-        basket.setDevices([...basket.devices, newDevice])
+        updateDeviceCount()
     }, [count])
 
-    const removeDevice = (device) => {
-        basket.setDevices(basket.devices.filter(d => d.id !== device.id))
-    }
+    const [deleteDevice, isDeleteDeviceLoading, deleteDeviceMessage] = useFetching(async () => {
+        await deleteDeviceFromOrder(device.id, basket.basket.id)
+        basket.deleteDevice(device)
+
+    }, 'Товар удален из корзины')
+
+    const [updateDeviceCount, isUpdateDeviceCountLoading, updateDeviceCountMessage] = useFetching(async () => {
+        await updateCount(device.id, basket.basket.id, count).then(data => {
+            basket.setDeviceInBasketCount(device, data)
+        })
+    })
+
+    useEffect(() => {
+
+        return () => {
+            if (deleteDeviceMessage.message)
+                notice.addNotice(deleteDeviceMessage)
+        }
+    }, [deleteDeviceMessage])
 
     return (
         <div className={classes.deviceInBasketBlock}>
+            <Loading isLoading={isDeleteDeviceLoading || isUpdateDeviceCountLoading}/>
             <div className={classes.leftSide}>
-                <img src={MyImage} alt=""/>
+                <img src={process.env.REACT_APP_API_URL + device.img} alt=""/>
                 <div className={classes.deviceName}>{device.name}</div>
             </div>
 
             <div className={classes.rightSide}>
                 <div className={classes.devicePrice}>
-                    {device.price}руб.
+                    {device.price} руб.
                 </div>
                 <Counter count={count} setCount={setCount}/>
-                    <Button onClick={() => removeDevice(device)}>Удалить</Button>
+                    <Button onClick={deleteDevice}>Удалить</Button>
 
             </div>
 

@@ -12,10 +12,11 @@ import {useFetching} from "../../hooks/useFetching";
 import Loading from "../UI/Loading/Loading";
 import SubmitButton from "../UI/SubmitButton/SubmitButton";
 import {useEffect} from "react";
+import {getAllDevicesInOrder, getCurrentOrder} from "../../http/orderAPI";
 
 const AuthForm = observer(({setAuthActive, ...props}) => {
 
-    const {user, notice} = useContext(Context)
+    const {user, notice, basket} = useContext(Context)
 
     const [signInWithRegistration,
         isRegistrationDataLoading,
@@ -25,6 +26,7 @@ const AuthForm = observer(({setAuthActive, ...props}) => {
             user.setIsAuth(true)
             setAuthActive(false)
         })
+        await getCurrentOrder(user.user.id).then(data => basket.setBasket(data))
     }, "Регистрация прошла успешно")
 
     const [signInWithAuthorization,
@@ -34,6 +36,8 @@ const AuthForm = observer(({setAuthActive, ...props}) => {
         user.setUser(data)
         user.setIsAuth(true)
         setAuthActive(false)
+        await getCurrentOrder(user.user.id).then(data => basket.setBasket(data))
+        await getAllDevicesInOrder(basket.basket.id).then(data => basket.setDevices(data))
     }, "Вы успешно авторизовались")
 
     useEffect(() => {

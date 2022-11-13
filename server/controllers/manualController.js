@@ -1,6 +1,6 @@
 const {Manual} = require("../models/models");
 const ApiError = require("../error/ApiError");
-
+const sequelize = require('../db')
 
 class ManualController {
 
@@ -70,6 +70,17 @@ class ManualController {
             return res.json(e.message)
         }
     }
+
+    async undoManuals(req, res, next){
+        try{
+            await sequelize.query('CALL undo_manuals()',[])
+            return res.json({message: 'Отмена действия прошла успешно'})
+        } catch (e) {
+            return res.json(e.message)
+        }
+    }
 }
+
+
 
 module.exports = new ManualController()

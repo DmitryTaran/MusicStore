@@ -1,28 +1,39 @@
-import React, {useContext} from 'react';
-import image from "../../assets/guitar.jpg";
+import React, {useContext, useEffect} from 'react';
 import Button from "../UI/Button/Button";
 import classes from './DeviceView.module.css'
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 import {AiFillStar} from 'react-icons/ai'
+import {useFetching} from "../../hooks/useFetching";
+import {addDeviceToOrder} from "../../http/orderAPI";
+import Loading from "../UI/Loading/Loading";
 
 const DeviceView = observer (({device}) => {
 
-    const {basket, user} = useContext(Context)
+    const {basket, user, notice, oneDevice} = useContext(Context)
+    const [addToBasket, isAddToBasketLoading, addToBasketMessage] = useFetching(async () => {
+        await addDeviceToOrder(basket.basket.id, device.id, 1).then(data => {
+            basket.setDevices([{...device, deviceInOrders: [{count: 1}]}, ...basket.devices])
+        })
+    }, 'Товар добавлен в корзину')
 
+    useEffect(() => {
+        if (addToBasketMessage.message)
+            notice.addNotice(addToBasketMessage)
+    }, [addToBasketMessage])
 
     return (
         <div className={classes.deviceView}>
-
+            <Loading isLoading={isAddToBasketLoading}/>
             <div style={{display: "flex"}}>
                 <div className={classes.imageBlock}>
-                    <img src={image} alt=""/>
+                    <img src={process.env.REACT_APP_API_URL + device.img} alt=""/>
                 </div>
 
                 <div className={classes.deviceName}>
                     <p>{device.name}</p>
                     <div className={classes.deviceViewRating}>
-                        Рейтинг: {device.rating?.substring(0, 3)}
+                        Рейтинг: {oneDevice.rating}
                         <AiFillStar size={30} color={'#f1ba30'}/>
                     </div>
 
@@ -31,18 +42,24 @@ const DeviceView = observer (({device}) => {
 
             <div className={classes.deviceViewBtn}>
                 <span className={classes.devicePrice}>Стоимость: {device.price}</span>
-                {
+                {user.user.role === 'CLIENT' &&
+                <div>
+                    {
 
-                    basket.devices.find((d) => d.id === device.id)
-                        ?   <div className={classes.deviceInBasketText}>
-                            Товар в корзине
-                        </div>
-                        : <Button onClick={() => basket.setDevices([{...device, count: 1}, ...basket.devices])}>
-                            Добавить в корзину
-                        </Button>
+                        basket.devices.find((d) => d.id === device.id)
+                            ?   <div className={classes.deviceInBasketText}>
+                                Товар в корзине
+                            </div>
+                            : <Button onClick={addToBasket}>
+                                Добавить в корзину
+                            </Button>
+                    }
+                </div>
                 }
 
+
             </div>
+
 
         </div>
     );

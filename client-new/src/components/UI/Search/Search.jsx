@@ -1,28 +1,37 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import Input from "../Input/TextInput/Input";
 import classes from './Search.module.css'
 import DropdownItem from "../Dropdown/DropdownItem";
 import Dropdown from "../Dropdown/Dropdown";
 import {useDropdown} from "../../../hooks/useDropdown";
 import {useInput} from "../../../hooks/useInput";
+import {Context} from "../../../index";
+import {validateEmptiness} from "../../../utils/validations";
+import {useForm} from "../../../hooks/useForm";
 
-const Search = ({manuals}) => {
+const Search = ({info, setChangingFlag, changingFlag}) => {
+
+    const {device} = useContext(Context)
 
     const [selectedManual, setSelectedManual] = useState({})
 
     const [openSearch, setOpenSearch, searchCloseRef] = useDropdown()
-
-
     const manualName
      = useInput('', [
         {
-            condition: () => false, message: 'Выберите характеристику из списка'
+            condition:
+                () => device.manuals.filter((manual) => manual === selectedManual).length === 0,
+            message: 'Выберите характеристику из списка'
         }
+    ])
+
+    const infoDescription = useInput('',[
+        {condition: validateEmptiness, message: "Введите описание характеристики"}
     ])
 
     const searchedManuals = useMemo(() => {
         if (manualName.value)
-            return manuals.filter(manual => manual.name.toLowerCase().includes(manualName.value))
+            return device.manuals.filter(manual => manual.name.toLowerCase().includes(manualName.value))
         else
             return []
 
@@ -42,6 +51,15 @@ const Search = ({manuals}) => {
 
     }, [manualName.value, searchedManuals])
 
+    const {isSubmitButtonDisabled} = useForm([manualName.errFlag, infoDescription.errFlag])
+
+    useEffect(() => {
+        info.manualId = selectedManual.id
+        info.description = infoDescription.value
+        info.errFlag = isSubmitButtonDisabled
+        setChangingFlag(!changingFlag)
+    }, [selectedManual, infoDescription.value, isSubmitButtonDisabled])
+
     return (
         <div className={classes.searchBlock} ref={searchCloseRef}>
             <Input
@@ -59,7 +77,7 @@ const Search = ({manuals}) => {
                 ref={searchCloseRef}
                 open={openSearch}
                 setOpen={setOpenSearch}
-                style={{transform: 'translateX(-100%)'}}
+                style={{transform: 'translateX(30%)'}}
             >
                 {searchedManuals.map(manual =>
                     <DropdownItem key={manual.id} onClick={(e) => selectManual(manual)}>
@@ -67,6 +85,14 @@ const Search = ({manuals}) => {
                     </DropdownItem>
                 )}
             </Dropdown>
+            <Input
+                title={'Описание характеристики'}
+                value={infoDescription.value}
+                onChange={infoDescription.onChange}
+                onFocus={() => infoDescription.onFocus}
+                onBlur={infoDescription.onBlur}
+                errorMessage={infoDescription.error}
+            />
         </div>
     );
 };

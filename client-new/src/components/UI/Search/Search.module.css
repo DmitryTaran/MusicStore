@@ -1,6 +1,7 @@
 .searchBlock{
     display: flex;
     position: relative;
+    flex-direction: column;
 }
 
 .dropdown{
@@ -12,4 +13,5 @@
     padding: 0.7rem;
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
+    transform: translateX(100px);
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import classes from './DeviceItem.module.css'
-import MyImage from '../../assets/guitar.jpg'
 import {useNavigate} from 'react-router-dom'
 import {DEVICE_ROUTE} from "../../utils/consts";
 import {AiFillStar} from 'react-icons/ai'
@@ -13,7 +12,7 @@ const DeviceItem = ({device}) => {
         <div className={classes.deviceItem} onClick={() => navigate(DEVICE_ROUTE + '/' + device.id)}>
 
             <div className={classes.image}>
-                <img src={MyImage} alt=""/>
+                <img src={process.env.REACT_APP_API_URL + device.img} alt=""/>
             </div>
 
 

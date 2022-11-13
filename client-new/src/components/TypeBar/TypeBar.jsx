@@ -4,7 +4,7 @@ import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 import {useFetching} from "../../hooks/useFetching";
 import {useEffect} from "react";
-import {getAllTypes} from "../../http/deviceAPI";
+import {getAllManuals, getAllTypes} from "../../http/deviceAPI";
 import Loading from "../UI/Loading/Loading";
 
 const TypeBar = observer (() => {
@@ -16,10 +16,16 @@ const TypeBar = observer (() => {
         isFetchTypesLoading,
         fetchTypesError
     ] = useFetching(async () => {
+
+        await getAllManuals().then(data => {
+            device.setManuals(data)
+        })
+
         await getAllTypes().then(data => {
             device.setTypes([{description: 'Все товары'}, ...data])
             device.setSelectedType({description: 'Все товары'})
         })
+
     })
 
     useEffect(() => {
@@ -37,7 +43,10 @@ const TypeBar = observer (() => {
                              ? classes.itemSelected
                              : classes.item
                     }
-                         onClick={() => device.setSelectedType(type)}
+                         onClick={() => {
+                             device.setSelectedType(type)
+                             device.setPage(1)
+                         }}
                     >
                         {type.description}
                     </div>

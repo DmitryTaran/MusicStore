@@ -1,7 +1,8 @@
 import Main from "./pages/Main";
-import {BASKET_ROUTE, DEVICE_ROUTE, MAIN_ROUTE} from "./utils/consts";
+import {BASKET_ROUTE, DEVICE_ROUTE, MAIN_ROUTE, MY_ORDERS_ROUTE} from "./utils/consts";
 import DevicePage from "./pages/DevicePage";
 import Basket from "./pages/Basket";
+import MyOrdersPage from "./pages/MyOrdersPage";
 
 
 export const publicRoutes = [
@@ -18,6 +19,10 @@ export const authRoutes = [...publicRoutes,
     {
         path: BASKET_ROUTE,
         Component: Basket
+    },
+    {
+      path: MY_ORDERS_ROUTE,
+      Component: MyOrdersPage
     }
 ]
 export const moderatorRoutes = [...authRoutes,

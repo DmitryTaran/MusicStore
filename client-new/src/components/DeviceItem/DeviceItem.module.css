@@ -42,9 +42,9 @@
     align-items: center;
 }
 
-img{
-    width: 200px;
+.image img{
     height: 200px;
+    max-width: 200px;
 }
 
 .image{

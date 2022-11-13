@@ -15,7 +15,7 @@ const Order = sequelize.define('order', {
     date: {type: DataTypes.DATE},
     delivery: {type: DataTypes.STRING},
     status:{type: DataTypes.STRING},
-    total_cost:{type: DataTypes.INTEGER},
+    totalCost:{type: DataTypes.INTEGER},
 })
 
 const Device = sequelize.define('device', {
@@ -41,7 +41,9 @@ const DeviceInfo = sequelize.define('deviceInfo', {
     description: {type: DataTypes.STRING, allowNull: false},
 })
 
-const DeviceInOrder = sequelize.define('deviceInOrder', {})
+const DeviceInOrder = sequelize.define('deviceInOrder', {
+        count: {type: DataTypes.STRING, defaultValue: 1}
+})
 
 User.hasMany(Order)
 Order.belongsTo(User)
@@ -52,8 +54,11 @@ Feedback.belongsTo(User)
 Device.hasMany(Feedback)
 Feedback.belongsTo(Device)
 
-Order.belongsToMany(Device, {through: DeviceInOrder})
-Device.belongsToMany(Order, {through: DeviceInOrder})
+Order.hasMany(DeviceInOrder)
+DeviceInOrder.belongsTo(Order)
+
+Device.hasMany(DeviceInOrder)
+DeviceInOrder.belongsTo(Device)
 
 Device.hasMany(DeviceInfo)
 DeviceInfo.belongsTo(Device)
