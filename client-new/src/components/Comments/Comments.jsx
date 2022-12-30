@@ -60,15 +60,20 @@ const Comments = observer (({comments, setComments}) => {
             {comments.length === 0 &&
                 <div className={classes.commentsEmpty}>Комментариев пока никто не оставил. Будьте первым</div>
             }
-
-            <div className={classes.commentsBtn}>
-                <Button onClick={() => onCommentButtonClick()}>Комментировать</Button>
-            </div>
-            <Modal active={commentFormActive} setActive={setCommentFormActive}>
+            { user.user.role === 'CLIENT' &&
+                <>
+                <div className={classes.commentsBtn}>
+                    <Button onClick={() => onCommentButtonClick()}>Комментировать</Button>
+                </div>
+                <Modal active={commentFormActive} setActive={setCommentFormActive}>
                 <CommentForm
-                    setCommentFormActive={setCommentFormActive}
+                setCommentFormActive={setCommentFormActive}
                 />
-            </Modal>
+                </Modal>
+                </>
+            }
+
+
 
         </div>
     );

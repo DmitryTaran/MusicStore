@@ -13,7 +13,7 @@ export default class BasketStore {
         }
 
         setDeviceInBasketCount(device, count){
-            const index =  this._devices.indexOf(device)
+            const index = this._devices.indexOf(device)
             this._devices[index].deviceInOrders[0].count = count
         }
 

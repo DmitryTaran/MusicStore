@@ -38,6 +38,10 @@ export const createDevice = async (device) => {
     return data
 }
 
+export const putDevice = async (device) => {
+    const {data} = await $authHost.put('api/device', device)
+    return data
+}
 
 export const getAllComments = async (deviceId) => {
     const {data} = await $host.get('api/feedback/' + deviceId)

@@ -1,0 +1,18 @@
+.dumps{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.dumpNames{
+    box-shadow: 1px 1px 2px 2px rgba(0,0,0,0.3);
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    transition: 0.3s;
+}
+
+.dumpNames:hover{
+    box-shadow: 1px 1px 2px 2px rgba(52, 17, 5, 0.6);
+}

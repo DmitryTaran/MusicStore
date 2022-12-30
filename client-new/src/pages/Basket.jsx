@@ -31,7 +31,7 @@ const Basket = observer(() => {
             </div>
 
             {basket.devices.length === 0
-                ? <div className="basketEmpty">
+                ? <div className="emptyPage">
                     <CreateOrderPanel totalPrice={basket.totalCost} isVisible={false}/>
                     Корзина пуста
                 </div>

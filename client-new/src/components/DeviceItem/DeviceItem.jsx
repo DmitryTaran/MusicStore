@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import classes from './DeviceItem.module.css'
 import {useNavigate} from 'react-router-dom'
 import {DEVICE_ROUTE} from "../../utils/consts";
 import {AiFillStar} from 'react-icons/ai'
+import {Context} from "../../index";
 
 const DeviceItem = ({device}) => {
 
     const navigate = useNavigate()
+
+    const {oneDevice} = useContext(Context)
 
     return (
         <div className={classes.deviceItem} onClick={() => navigate(DEVICE_ROUTE + '/' + device.id)}>
@@ -23,7 +26,7 @@ const DeviceItem = ({device}) => {
                     {device.name}
                 </p>
                 <div className={classes.rating}>
-                    {device.rating?.substring(0, 3)} <AiFillStar color={'#f1ba30'} size={25}/>
+                    {device.rating} <AiFillStar color={'#f1ba30'} size={25}/>
                 </div>
 
             </div>

@@ -12,6 +12,8 @@ import {Context} from "../index";
 import {dump, restore} from "../http/adminAPI";
 import {useFetching} from "../hooks/useFetching";
 import Loading from "./UI/Loading/Loading";
+import RestoringForm from "./RestoringForm/RestoringForm";
+import SetRoleForm from "./SetRoleForm/SetRoleForm";
 
 
 const AdminTools = () => {
@@ -20,29 +22,22 @@ const AdminTools = () => {
 
     const [createDeviceFormActive, setCreateDeviceFormActive] = useState(false)
     const [createManualFormActive, setCreateManualFormActive] = useState(false)
+    const [roleFormActive, setRoleFormActive] = useState(false)
+    const [restoringFormActive, setRestoringFormActive] = useState(false)
     const [openAdminTool, setOpenAdminTool, dropdownRef] = useDropdown()
 
     const [dumping, isDumpingLoading, dumpingMessage] = useFetching(async () => {
-        await dump()
-    }, 'Резервная копия создана успешно')
-
-    const [restoring, isRestoringLoading, restoringMessage] = useFetching(async () => {
-        await restore()
-    }, 'База успешно восстановлена')
+        await dump().then(data => notice.addNotice({message: data, isSuccess: true}))
+    })
 
     useEffect(() => {
         if (dumpingMessage.message)
             notice.addNotice(dumpingMessage)
     }, [dumpingMessage])
 
-    useEffect(() => {
-        if (restoringMessage.message)
-            notice.addNotice(restoringMessage)
-    }, [restoringMessage])
-
     return (
         <div>
-            <Loading isLoading={isDumpingLoading || isRestoringLoading}/>
+            <Loading isLoading={isDumpingLoading}/>
             <div ref={dropdownRef}>
                 <Button onClick={() => setOpenAdminTool(!openAdminTool)}>Инструменты</Button>
                 <Dropdown
@@ -75,10 +70,14 @@ const AdminTools = () => {
                             <DropdownItem onClick={dumping}>
                                 Резервная копия
                             </DropdownItem>
-                            <DropdownItem>
-                                Отмена действия
+                            <DropdownItem onClick={() => setRoleFormActive(true)}>
+                                Раздача ролей
                             </DropdownItem>
-                            <DropdownItem onClick={restoring}>
+                            <DropdownItem onClick={() => {
+                                setRestoringFormActive(true)
+                                setOpenAdminTool(false)
+                            }
+                            }>
                                 Восстановление базы
                             </DropdownItem>
                         </>
@@ -95,11 +94,25 @@ const AdminTools = () => {
                 <CreateDeviceForm setCreateDeviceActive={setCreateDeviceFormActive}/>
             </Modal>
             <Modal
+                active={roleFormActive}
+                setActive={setRoleFormActive}
+            >
+                <SetRoleForm setActive={setRoleFormActive}/>
+            </Modal>
+            <Modal
                 active={createManualFormActive}
                 setActive={setCreateManualFormActive}
             >
                 <CreateManualForm
                     setCreateManualActive={setCreateManualFormActive}
+                />
+            </Modal>
+            <Modal
+                active={restoringFormActive}
+                setActive={setRestoringFormActive}
+            >
+                <RestoringForm
+                    setRestoringFormActive={setRestoringFormActive}
                 />
             </Modal>
         </div>

@@ -33,6 +33,16 @@ const MyOrdersPage = () => {
        return (
            <Loading isLoading={isGetAllOrdersLoading}/>
        )
+
+
+     if ( orders.length === 0)
+         return (
+             <div className="orderPage">
+                 <h1>Мои заказы</h1>
+                 <div className="emptyPage">Вы не оформили ни одного заказа</div>
+                 </div>
+         )
+
     return (
         <div className="orderPage">
             <h1>Мои заказы</h1>

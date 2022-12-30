@@ -73,7 +73,7 @@ class ManualController {
 
     async undoManuals(req, res, next){
         try{
-            await sequelize.query('CALL undo_manuals()',[])
+            await sequelize.query('CALL undo_database()',[])
             return res.json({message: 'Отмена действия прошла успешно'})
         } catch (e) {
             return res.json(e.message)

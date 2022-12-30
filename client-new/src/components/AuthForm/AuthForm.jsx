@@ -43,9 +43,14 @@ const AuthForm = observer(({setAuthActive, ...props}) => {
     useEffect(() => {
         if (registrationMessage.message)
             notice.addNotice(registrationMessage)
+    }, [registrationMessage])
+
+    useEffect(() => {
         if (authorizationMessage.message)
             notice.addNotice(authorizationMessage)
-    }, [registrationMessage, authorizationMessage])
+    }, [authorizationMessage])
+
+
 
     const [isLogin, setIsLogin] = useState(true)
 

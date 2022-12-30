@@ -26,9 +26,10 @@ function App() {
                 user.setIsAuth(true)
             }
         })
-
-        await getCurrentOrder(user.user.id).then(data => basket.setBasket(data))
-        await getAllDevicesInOrder(basket.basket.id).then(data => basket.setDevices(data))
+        if (user.user.isAuth){
+            await getCurrentOrder(user.user.id).then(data => basket.setBasket(data))
+            await getAllDevicesInOrder(basket.basket.id).then(data => basket.setDevices(data))
+        }
     })
 
     useEffect(() => {

@@ -69,7 +69,7 @@ class DeviceController {
             let {name, price, info} = req.body
             price = parseInt(price)
             if (req.files === null) {
-                throw Error('Выберите фотографию товара')
+                return next(ApiError.badRequest('Выберите фотографию товара'))
             }
             const {img} = req.files
             let fileName = uuid.v4() + ".jpg"
@@ -100,21 +100,36 @@ class DeviceController {
 
         try {
 
-            let {id, info, ...data} = req.body
+            let {id, info, price, name} = req.body
+            let device
+            if (req.files !== null){
+                const {img} = req.files
+                let fileName = uuid.v4() + ".jpg"
+                device = await Device.update({price, name, img: fileName}, {where: {id}})
+                img.mv(path.resolve(__dirname, '..', 'static', fileName))
 
-            const device = await Device.update({...data}, {where: {id}})
+            } else {
+                device = await Device.update({price, name}, {where: {id}})
+            }
 
             if (info) {
+
+                await DeviceInfo.destroy({where: {deviceId: id}})
+
                 info = JSON.parse(info)
                 info.forEach(i => {
-                    DeviceInfo.update(
-                        {description: i.description},
-                        {where: {id: i.id}}
+                    DeviceInfo.create(
+                        {
+                            deviceId: id,
+                            manualId: i.manualId,
+                            description: i.description
+                        },
+
                     )
                 })
             }
 
-            return res.json(device)
+            return res.json({device})
 
         } catch (e) {
             return next(ApiError.badRequest(e.message))

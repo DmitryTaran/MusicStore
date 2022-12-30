@@ -94,6 +94,40 @@ class UserController {
         }
 
     }
+
+    async setRole(req, res, next) {
+
+        try {
+
+            const {email, role} = req.body
+
+            const user = await User.findOne(
+                {
+                    where: {email}
+                }
+            )
+
+            if (!user){
+                return next(ApiError.badRequest('Пользователь не найден'))
+            }
+
+            const updatedUser = await User.update(
+                {role},
+                {where: {email}}
+            )
+
+            return res.json(updatedUser)
+
+        } catch (e){
+
+            return next(ApiError.badRequest(e.message))
+
+        }
+    }
+
+
+
+
 }
 
 module.exports = new UserController()

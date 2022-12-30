@@ -13,6 +13,18 @@ const Search = ({info, setChangingFlag, changingFlag}) => {
 
     const {device} = useContext(Context)
 
+
+
+    useEffect(() => {
+        const realInfo = {...info}
+        const infoManual = {...realInfo.manual}
+        setSelectedManual(infoManual)
+        manualName.setValue(info?.manual?.name)
+        infoDescription.setValue(info?.description)
+        manualName.onBlur()
+        infoDescription.onBlur()
+    }, [])
+
     const [selectedManual, setSelectedManual] = useState({})
 
     const [openSearch, setOpenSearch, searchCloseRef] = useDropdown()
@@ -20,7 +32,7 @@ const Search = ({info, setChangingFlag, changingFlag}) => {
      = useInput('', [
         {
             condition:
-                () => device.manuals.filter((manual) => manual === selectedManual).length === 0,
+                () => device.manuals.filter((manual) => manual.name === selectedManual.name).length === 0,
             message: 'Выберите характеристику из списка'
         }
     ])
